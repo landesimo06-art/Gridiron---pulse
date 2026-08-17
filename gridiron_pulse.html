@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gridiron Pulse — NFL Updates & Fan Polls</title>
+<style>
+:root{
+  --bg:#070b12;--card:#101722;--card2:#151e2b;--text:#f5f7fa;--muted:#9aa7b7;
+  --accent:#19d66b;--accent2:#0ea5e9;--line:#243041;--danger:#ff5d5d;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#070b12,#0b111a 45%,#070b12);color:var(--text)}
+a{color:inherit;text-decoration:none}
+.container{max-width:1180px;margin:auto;padding:0 18px}
+header{position:sticky;top:0;z-index:10;background:rgba(7,11,18,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{height:70px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.logo{font-weight:900;font-size:22px;letter-spacing:.5px}.logo span{color:var(--accent)}
+nav{display:flex;gap:20px;color:#cbd5e1;font-size:14px}
+nav a:hover{color:var(--accent)}
+.hero{padding:42px 0 28px;display:grid;grid-template-columns:1.5fr .8fr;gap:22px}
+.heroMain,.heroSide,.card{background:linear-gradient(145deg,var(--card),#0d141e);border:1px solid var(--line);border-radius:20px;box-shadow:0 14px 35px #0004}
+.heroMain{padding:32px}.eyebrow{color:var(--accent);font-weight:800;font-size:12px;letter-spacing:1.5px;text-transform:uppercase}
+h1{font-size:clamp(38px,6vw,68px);line-height:.98;margin:12px 0 16px}
+.hero p{color:var(--muted);font-size:17px;line-height:1.6;max-width:650px}
+.btn{border:0;border-radius:11px;padding:11px 15px;font-weight:800;cursor:pointer;background:var(--accent);color:#04100a}
+.btn.secondary{background:#202b3a;color:#fff}.btn:hover{filter:brightness(1.08)}
+.heroSide{padding:22px}.status{display:flex;align-items:center;gap:9px;color:#cbd5e1;font-size:13px}
+.dot{width:9px;height:9px;background:var(--accent);border-radius:50%;box-shadow:0 0 12px var(--accent)}
+.countdown{font-size:28px;font-weight:900;margin:12px 0 4px}
+section{padding:14px 0 34px}
+.sectionHead{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:16px}
+h2{margin:0;font-size:27px}.sub{color:var(--muted);font-size:13px}
+.newsGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.news{padding:20px}.tag{display:inline-block;background:#173325;color:#65f0a1;border-radius:99px;padding:5px 9px;font-size:11px;font-weight:800}
+.news h3{font-size:18px;line-height:1.3;margin:14px 0 9px}.news p{color:var(--muted);line-height:1.5;font-size:13px}
+.meta{font-size:11px;color:#728093}
+.games{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+.game{padding:20px}.gameTop{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-bottom:17px}
+.matchup{display:grid;grid-template-columns:1fr 50px 1fr;align-items:center;text-align:center;gap:10px}
+.team{font-weight:900;font-size:18px}.record{color:var(--muted);font-size:11px;margin-top:4px}
+.vs{font-weight:900;color:#718096}
+.pollbar{height:10px;background:#253142;border-radius:99px;overflow:hidden;margin:16px 0 9px;display:flex}
+.awaybar{background:var(--accent2);height:100%}.homebar{background:#8b5cf6;height:100%}
+.pollnums{display:flex;justify-content:space-between;color:#cbd5e1;font-size:12px}
+.voteRow{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
+.vote{padding:10px;border:1px solid #334155;background:#121b28;color:#fff;border-radius:10px;cursor:pointer;font-weight:800}
+.vote:hover{border-color:var(--accent)}
+.vote.selected{outline:2px solid var(--accent);background:#153322}
+.standings{overflow:auto}.table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:15px;overflow:hidden}
+th,td{padding:12px;text-align:left;border-bottom:1px solid var(--line);font-size:13px}th{color:var(--muted);font-size:11px;text-transform:uppercase}
+.rank{color:var(--accent);font-weight:900}
+.footer{border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:12px}
+.notice{margin:0 0 18px;padding:12px 14px;border:1px solid #23452f;background:#0d1c14;border-radius:12px;color:#bcefcf;font-size:13px}
+@media(max-width:800px){nav{display:none}.hero{grid-template-columns:1fr}.newsGrid,.games{grid-template-columns:1fr}.heroMain{padding:24px}.matchup{grid-template-columns:1fr 35px 1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <div class="logo">GRIDIRON<span>PULSE</span> 🏈</div>
+    <nav><a href="#news">News</a><a href="#games">Games & Polls</a><a href="#standings">Standings</a></nav>
+    <button class="btn secondary" onclick="refreshSite()">↻ Refresh</button>
+  </div>
+</header>
+
+<main class="container">
+  <div class="hero">
+    <div class="heroMain">
+      <div class="eyebrow">NFL • Daily Hub</div>
+      <h1>Your NFL.<br>Every day.</h1>
+      <p>Follow league updates, upcoming games, scores, standings and fan predictions in one place.</p>
+      <button class="btn" onclick="document.getElementById('games').scrollIntoView({behavior:'smooth'})">Vote on Games →</button>
+    </div>
+    <div class="heroSide">
+      <div class="status"><span class="dot"></span><b>LIVE UPDATE STATUS</b></div>
+      <div class="countdown" id="clock">Updating…</div>
+      <div class="sub">Next automatic refresh</div>
+      <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+      <div class="sub">Last refreshed</div>
+      <div style="margin-top:5px;font-weight:800" id="lastRefresh">—</div>
+    </div>
+  </div>
+
+  <div class="notice">Prototype note: the fan votes below are saved in your browser. A production version can connect this interface to a live NFL data/news API and a shared database so everyone sees the same vote totals.</div>
+
+  <section id="news">
+    <div class="sectionHead"><div><h2>🔥 Latest NFL Updates</h2><div class="sub">Fresh league stories</div></div></div>
+    <div class="newsGrid">
+      <article class="card news"><span class="tag">COWBOYS</span><h3>Von Miller agrees to join Dallas for his 15th NFL season</h3><p>The eight-time Pro Bowl pass rusher is returning to his home state and adds veteran experience to Dallas' defense.</p><div class="meta">Aug. 17, 2026 • Source: Reuters</div></article>
+      <article class="card news"><span class="tag">TRANSACTIONS</span><h3>Panthers add veteran tight end Darren Waller</h3><p>Carolina made a roster move by signing Waller while making additional changes to its roster.</p><div class="meta">Aug. 17, 2026 • Source: Reuters</div></article>
+      <article class="card news"><span class="tag">TRAINING CAMP</span><h3>NFL teams prepare for Preseason Week 2</h3><p>Preseason Week 2 is scheduled for Aug. 20–23 as teams continue evaluating players before the regular season.</p><div class="meta">Updated daily</div></article>
+    </div>
+  </section>
+
+  <section id="games">
+    <div class="sectionHead"><div><h2>🗳️ Fan Picks</h2><div class="sub">Vote for the team you think will win</div></div></div>
+    <div class="games" id="gamesGrid"></div>
+  </section>
+
+  <section id="standings">
+    <div class="sectionHead"><div><h2>📊 Standings</h2><div class="sub">Sample display — connect to live standings for production</div></div></div>
+    <div class="standings">
+      <table class="table"><thead><tr><th>#</th><th>Team</th><th>W</th><th>L</th><th>T</th></tr></thead>
+      <tbody>
+        <tr><td class="rank">1</td><td>Baltimore Ravens</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td class="rank">2</td><td>Buffalo Bills</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td class="rank">3</td><td>Philadelphia Eagles</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td class="rank">4</td><td>Detroit Lions</td><td>0</td><td>0</td><td>0</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+</main>
+
+<footer class="footer"><div class="container">© 2026 Gridiron Pulse • Unofficial fan site concept. NFL team names/logos belong to their respective owners.</div></footer>
+
+<script>
+const games = [
+  {id:"raiders-texans",date:"Thu, Aug 20 • 8:00 PM ET",a:"Las Vegas Raiders",b:"Houston Texans",aVotes:61,bVotes:39},
+  {id:"chargers-49ers",date:"Thu, Aug 20 • 10:00 PM ET",a:"Los Angeles Chargers",b:"San Francisco 49ers",aVotes:46,bVotes:54},
+  {id:"seahawks-titans",date:"Sun, Aug 23 • 8:00 PM ET",a:"Seattle Seahawks",b:"Tennessee Titans",aVotes:57,bVotes:43},
+  {id:"bears-browns",date:"Upcoming",a:"Chicago Bears",b:"Cleveland Browns",aVotes:52,bVotes:48}
+];
+
+function getVotes(g){
+  const saved=JSON.parse(localStorage.getItem("gp_votes")||"{}");
+  return saved[g.id] || {a:g.aVotes,b:g.bVotes};
+}
+function renderGames(){
+  const el=document.getElementById("gamesGrid");
+  el.innerHTML=games.map(g=>{
+    const v=getVotes(g), total=v.a+v.b, ap=Math.round(v.a/total*100), bp=100-ap;
+    const mine=localStorage.getItem("gp_pick_"+g.id);
+    return `<article class="card game">
+      <div class="gameTop"><span>${g.date}</span><span>FAN POLL</span></div>
+      <div class="matchup">
+        <div><div class="team">${g.a}</div><div class="record">Away</div></div>
+        <div class="vs">VS</div>
+        <div><div class="team">${g.b}</div><div class="record">Home</div></div>
+      </div>
+      <div class="pollbar"><div class="awaybar" style="width:${ap}%"></div><div class="homebar" style="width:${bp}%"></div></div>
+      <div class="pollnums"><span>${ap}% ${g.a}</span><span>${bp}% ${g.b}</span></div>
+      <div class="voteRow">
+        <button class="vote ${mine==="a"?"selected":""}" onclick="vote('${g.id}','a')">Vote ${g.a}</button>
+        <button class="vote ${mine==="b"?"selected":""}" onclick="vote('${g.id}','b')">Vote ${g.b}</button>
+      </div>
+    </article>`;
+  }).join("");
+}
+function vote(id,side){
+  if(localStorage.getItem("gp_pick_"+id)){alert("You already voted on this game in this browser.");return}
+  const g=games.find(x=>x.id===id), v=getVotes(g); v[side]++;
+  const all=JSON.parse(localStorage.getItem("gp_votes")||"{}"); all[id]=v;
+  localStorage.setItem("gp_votes",JSON.stringify(all)); localStorage.setItem("gp_pick_"+id,side);
+  renderGames();
+}
+function refreshSite(){
+  document.getElementById("lastRefresh").textContent=new Date().toLocaleString();
+  renderGames();
+}
+let seconds=60;
+setInterval(()=>{seconds--; if(seconds<=0){seconds=60;refreshSite()} document.getElementById("clock").textContent=seconds+"s";},1000);
+refreshSite();
+</script>
+</body>
+</html>
